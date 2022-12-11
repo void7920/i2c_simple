@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module i2c_slave_top #(parameter delay = 10000)(
+module i2c_slave_top #(parameter delay = 625)(
     inout SDA, 
     input SCL,
     input reset

@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module i2c_slave_doubler #(parameter delay = 50)(
+module i2c_slave_doubler #(parameter delay = 625)(
     output oclk,
     input iclk,
     input reset

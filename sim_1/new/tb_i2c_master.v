@@ -33,9 +33,9 @@ module tb_i2c_master();
     wire SDA;
     
     i2c_master_top uut1(.SDA(SDA), .SCL(SCL), .clk(clk), .reset(rst), .start(start), .addr(addr), .data(data), .rw(rw));
-    i2c_slave_top #(10000) uut2(.SDA(SDA), .SCL(SCL), .reset(rst));
+    i2c_slave_top #(625) uut2(.SDA(SDA), .SCL(SCL), .reset(rst));
     
-    always#(10) clk = ~clk;
+    always#(62.5) clk = ~clk;
     
     initial begin
         clk = 1'b0;
@@ -47,12 +47,12 @@ module tb_i2c_master();
     end
     
     initial begin
-        #40000 rst = 1'b0;
-        #50000 start = 1'b1;
-        #50000 start = 1'b0;
-        #500000 data = $urandom%(2**8);
-        #800000 data = mem_addr;
-        #000000 start = 1'b1;
+        #1000 rst = 1'b0;
+        #1000 start = 1'b1;
+        #1000 start = 1'b0;
+        #50000 data = $urandom%(2**8);
+        #30000 data = mem_addr;
+        #00000 start = 1'b1;
                        rw = 1'b1;
     end
 endmodule
