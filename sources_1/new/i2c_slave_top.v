@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module i2c_slave_top #(parameter delay = 625)(
+module i2c_slave_top (
     inout SDA, 
     input SCL,
     input reset
@@ -33,8 +33,8 @@ module i2c_slave_top #(parameter delay = 625)(
     wire [7:0]mem;
     wire rd;
     
-    i2c_slave_doubler #(delay) doubler(.oclk(sda_clk), .iclk(SCL), .reset(reset));
+    i2c_slave_doubler doubler(.oclk(sda_clk), .iclk(SCL), .reset(reset));
     i2c_slave_fsm sfsm(.state(state), .clk(sda_clk), .reset(reset), .SCL(SCL), .SDA(SDA));
-    i2c_slave_sdalogic #(2) ssda(.SDA(SDA), .odata(sdata), .mem_addr(mem),.rd(rd), .clk(sda_clk), .reset(reset), .SCL(SCL), .state(state), .idata(rdata)); 
+    i2c_slave_sdalogic #(7'd2) ssda(.SDA(SDA), .odata(sdata), .mem_addr(mem),.rd(rd), .clk(sda_clk), .reset(reset), .SCL(SCL), .state(state), .idata(rdata)); 
     i2c_slave_mem ram(.o(rdata), .clk(sda_clk), .addr(mem), .i(sdata), .rd(rd));
 endmodule

@@ -35,7 +35,6 @@ module i2c_slave_fsm(
     parameter STATE_ACK=3'd4;
     parameter STATE_MEM=3'd5;
     parameter STATE_DATA=3'd6; 
-    parameter STATE_STOP=3'd7;
     
     reg [2:0] next_state;
     reg [7:0] cnt;
@@ -43,7 +42,7 @@ module i2c_slave_fsm(
     
     always@(posedge clk, posedge reset) begin
         if (reset)
-            state <= STATE_IDLE;
+            state <= STATE_START;
         else
             state <= next_state;
     end
@@ -89,10 +88,6 @@ module i2c_slave_fsm(
                     else
                         cnt <= cnt - 1;
                 end
-                STATE_STOP: begin
-                    cnt <= 0;
-                end
-                 
                 default: cnt <= 0;
             endcase
     end
@@ -121,9 +116,6 @@ module i2c_slave_fsm(
                 STATE_DATA: begin
                     flag <= 3;
                 end
-                STATE_STOP: begin
-                    flag <= 0;
-                end
                 default: flag <= 0;
             endcase
     end
@@ -133,10 +125,7 @@ module i2c_slave_fsm(
         
         case (state)
              STATE_IDLE: begin
-                if (SDA == 1 || SCL == 1)
                     next_state = STATE_START;
-                else
-                    next_state = STATE_IDLE;
              end
             STATE_START: begin
                 if (SDA == 0 && SCL == 0)
@@ -180,11 +169,7 @@ module i2c_slave_fsm(
                 else
                     next_state = STATE_DATA;
              end
-            STATE_STOP: begin
-                next_state = STATE_IDLE;
-             end
-             
-             default: next_state = STATE_IDLE;
+             default: next_state = STATE_START;
         endcase
     end
 endmodule

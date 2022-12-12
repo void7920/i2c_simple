@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module i2c_slave_sdalogic #(parameter ID = 7'd2)(
+module i2c_slave_sdalogic #(parameter ID = 7'd2) (
     inout SDA,
     output [7:0]odata,
     output [7:0]mem_addr,
@@ -39,7 +39,7 @@ module i2c_slave_sdalogic #(parameter ID = 7'd2)(
     parameter STATE_ACK=3'd4;
     parameter STATE_MEM=3'd5;
     parameter STATE_DATA=3'd6; 
-    
+
     reg rw;
     reg [6:0] buf_addr;
     reg [7:0] buf_mem;
@@ -49,7 +49,7 @@ module i2c_slave_sdalogic #(parameter ID = 7'd2)(
     assign rd = (rw) ? 1'b1 : 1'b0;
     assign odata = (state==STATE_IDLE && ~rw) ? buf_data : 0;   
     assign mem_addr = (state==STATE_IDLE | state == STATE_ACK) ? buf_mem : 0;
-    assign SDA = (state == STATE_ACK && buf_addr == ID) ? 1'b1 : ((state == STATE_DATA && rw) ? ((buf_addr == ID) ? buf_data[7] : 1'bz) : 1'bz);
+    assign SDA = (state == STATE_ACK && buf_addr == ID) ? 1'b1 : ((state == STATE_DATA && buf_addr == ID) ? ((rw) ? buf_data[7] : 1'bz) : 1'bz);
     
     always@(posedge clk, posedge reset) begin
         if (reset)
