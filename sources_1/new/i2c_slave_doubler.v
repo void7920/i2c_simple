@@ -29,24 +29,15 @@ module i2c_slave_doubler #(parameter delay = 625)(
     reg Q; 
     reg clk;
     reg temp;
-//    reg clk = iclk ^ temp;
-    
-//    wire #(delay)temp = Q;
     
     assign oclk = ~clk;
     
     always@ (*) begin 
-        if (reset )
-            clk = 0;
-        else
-            clk = iclk ^ temp;
+        clk = iclk ^ temp;
     end
     
     always@(*) begin
-        if (reset)
-            temp = 0;
-        else
-            #(delay) temp = Q;
+        #(delay) temp = Q;
     end
     
     always@(posedge clk, posedge reset) begin
