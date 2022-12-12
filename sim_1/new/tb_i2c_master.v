@@ -50,9 +50,10 @@ module tb_i2c_master();
         #1000 rst = 1'b0;
         #1000 start = 1'b1;
         #1000 start = 1'b0;
-        #50000 data = $urandom%(2**8);
+        #50000 data = $random%(2**8);
         #30000 data = mem_addr;
-        #00000 start = 1'b1;
-                       rw = 1'b1;
+                  start = 1'b1;
+                  rw = 1'b1;
+        #80000 $finish;
     end
 endmodule
